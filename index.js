@@ -4,8 +4,7 @@ const tweetBtn = document.getElementById("tweet-btn");
 
 render();
 
-tweetBtn.addEventListener("click", function () {
-});
+tweetBtn.addEventListener("click", function () {});
 
 document.addEventListener("click", function (e) {
   if (e.target.dataset.like) {
@@ -17,7 +16,16 @@ function handleLikeClick(tweetId) {
   const targetTweetObj = tweetsData.filter(function (tweet) {
     return tweet.uuid === tweetId;
   })[0];
-  targetTweetObj.likes++;
+
+  if (targetTweetObj.isLiked) {
+    targetTweetObj.likes--;
+    targetTweetObj.isLiked = false;
+    render();
+  } else  {
+    targetTweetObj.likes++;
+    targetTweetObj.isLiked = true;
+    render();
+  }
 }
 
 function getFeedHtml() {
