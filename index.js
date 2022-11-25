@@ -2,8 +2,6 @@ import { tweetsData } from "./data.js";
 const tweetInput = document.getElementById("tweet-input");
 const tweetBtn = document.getElementById("tweet-btn");
 
-render();
-
 tweetBtn.addEventListener("click", function () {});
 
 document.addEventListener("click", function (e) {
@@ -46,6 +44,12 @@ function getFeedHtml() {
   let feedHtml = ``;
 
   tweetsData.forEach(function (tweet) {
+    let likeIconClass = "";
+
+    if (tweet.isLiked) {
+      likeIconClass = "liked";
+    }
+
     feedHtml += `
 <div class="tweet">
     <div class="tweet-inner">
@@ -61,7 +65,7 @@ function getFeedHtml() {
                     ${tweet.replies.length}
                 </span>
                 <span class="tweet-detail">
-                    <i class="fa-solid fa-heart"
+                    <i class="fa-solid fa-heart ${likeIconClass}"
                     data-like="${tweet.uuid}"
                     ></i>
                     ${tweet.likes}
@@ -84,3 +88,5 @@ function getFeedHtml() {
 function render() {
   document.getElementById("feed").innerHTML = getFeedHtml();
 }
+
+render();
