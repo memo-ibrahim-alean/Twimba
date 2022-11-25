@@ -5,13 +5,12 @@ const tweetInput = document.getElementById("tweet-input");
 const tweetsFeed = document.getElementById("feed");
 
 tweetBtn.addEventListener("click", function () {
-  console.log(tweetInput.value);
-  getFeedHtml();
+  render();
 });
 
 function getFeedHtml() {
   let feedHtml = "";
-  for (let tweet of tweetsData) {
+  tweetsData.forEach(function (tweet) {
     feedHtml += `
       <div class="tweet">
         <div class="tweet-inner">
@@ -34,6 +33,11 @@ function getFeedHtml() {
         </div>
       </div>
     `;
-  }
-  tweetsFeed.innerHTML = feedHtml;
+  });
+
+  return feedHtml;
+}
+
+function render() {
+  tweetsFeed.innerHTML = getFeedHtml();
 }
