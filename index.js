@@ -7,18 +7,14 @@ tweetBtn.addEventListener("click", function () {
 });
 
 document.addEventListener("click", function (e) {
-  console.log("like", e.target.dataset.like);
-  console.log("retweet", e.target.dataset.retweet);
-  /*
-Challenge:
-1. When a like icon is clicked, this function
-   should log out the contents of the 'data-like'
-   data-attribute.
-
-⚠️ Clicking on the page but not on the like icon
-   will log out 'undefined'. That is absolutely fine.
-*/
+  if (e.target.dataset.like) {
+    handleLikeClick(e.target.dataset.like);
+  }
 });
+
+function handleLikeClick(tweetId) {
+  console.log("like id = ", tweetId);
+}
 
 function getFeedHtml() {
   let feedHtml = ``;
