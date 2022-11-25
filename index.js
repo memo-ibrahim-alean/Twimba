@@ -2,8 +2,9 @@ import { tweetsData } from "./data.js";
 const tweetInput = document.getElementById("tweet-input");
 const tweetBtn = document.getElementById("tweet-btn");
 
+render();
+
 tweetBtn.addEventListener("click", function () {
-  console.log(tweetInput.value);
 });
 
 document.addEventListener("click", function (e) {
@@ -13,7 +14,10 @@ document.addEventListener("click", function (e) {
 });
 
 function handleLikeClick(tweetId) {
-  console.log("like id = ", tweetId);
+  const targetTweetObj = tweetsData.filter(function (tweet) {
+    return tweet.uuid === tweetId;
+  })[0];
+  targetTweetObj.likes++;
 }
 
 function getFeedHtml() {
@@ -58,5 +62,3 @@ function getFeedHtml() {
 function render() {
   document.getElementById("feed").innerHTML = getFeedHtml();
 }
-
-render();
