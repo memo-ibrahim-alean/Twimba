@@ -1,8 +1,7 @@
 import { tweetsData } from "./data.js";
-const tweetInput = document.getElementById("tweet-input");
-const tweetBtn = document.getElementById("tweet-btn");
+import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
-tweetBtn.addEventListener("click", function () {});
+const tweetInput = document.getElementById("tweet-input");
 
 document.addEventListener("click", function (e) {
   if (e.target.dataset.like) {
@@ -11,22 +10,10 @@ document.addEventListener("click", function (e) {
     handleRetweetClick(e.target.dataset.retweet);
   } else if (e.target.dataset.reply) {
     handleReplyClick(e.target.dataset.reply);
+  } else if (e.target.id === "tweet-btn") {
+    handleTweetBtnClick();
   }
 });
-
-function handleRetweetClick(tweetId) {
-  const targetTweetObj = tweetsData.filter(function (tweet) {
-    return tweet.uuid === tweetId;
-  })[0];
-
-  if (targetTweetObj.isRetweeted) {
-    targetTweetObj.retweets--;
-  } else {
-    targetTweetObj.retweets++;
-  }
-  targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted;
-  render();
-}
 
 function handleLikeClick(tweetId) {
   const targetTweetObj = tweetsData.filter(function (tweet) {
@@ -42,10 +29,36 @@ function handleLikeClick(tweetId) {
   render();
 }
 
-function handleReplyClick(replyId) {
-  const tweetReply = document.getElementById(replyId);
+function handleRetweetClick(tweetId) {
+  const targetTweetObj = tweetsData.filter(function (tweet) {
+    return tweet.uuid === tweetId;
+  })[0];
 
+  if (targetTweetObj.isRetweeted) {
+    targetTweetObj.retweets--;
+  } else {
+    targetTweetObj.retweets++;
+  }
+  targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted;
+  render();
+}
+
+function handleReplyClick(replyId) {
   document.getElementById(`replies-${replyId}`).classList.toggle("hidden");
+}
+
+function handleTweetBtnClick() {
+  console.log({
+    handle: `@Scrimba`,
+    profilePic: `images/scrimbalogo.png`,
+    likes: 0,
+    retweets: 0,
+    tweetText: `${tweetInput.value}`,
+    replies: [],
+    isLiked: false,
+    isRetweeted: false,
+    uuid: uuidv4(),
+  });
 }
 
 function getFeedHtml() {
@@ -53,11 +66,12 @@ function getFeedHtml() {
 
   tweetsData.forEach(function (tweet) {
     let likeIconClass = "";
-    let retweetIconClass = "";
 
     if (tweet.isLiked) {
       likeIconClass = "liked";
     }
+
+    let retweetIconClass = "";
 
     if (tweet.isRetweeted) {
       retweetIconClass = "retweeted";
@@ -66,20 +80,18 @@ function getFeedHtml() {
     let repliesHtml = "";
 
     if (tweet.replies.length > 0) {
-      const replyDiv = document.getElementById("replies-TWEET");
-
       tweet.replies.forEach(function (reply) {
         repliesHtml += `
-          <div class="tweet-reply">
-            <div class="tweet-inner">
-              <img src="${reply.profilePic}" class="profile-pic">
-              <div>
+<div class="tweet-reply">
+    <div class="tweet-inner">
+        <img src="${reply.profilePic}" class="profile-pic">
+            <div>
                 <p class="handle">${reply.handle}</p>
                 <p class="tweet-text">${reply.tweetText}</p>
-              </div>
             </div>
-          </div>
-        `;
+        </div>
+</div>
+`;
       });
     }
 
@@ -113,7 +125,6 @@ function getFeedHtml() {
         </div>
     </div>
     <div class="hidden" id="replies-${tweet.uuid}">
-        <!-- REPLIES HERE -->
         ${repliesHtml}
     </div>
 </div>
